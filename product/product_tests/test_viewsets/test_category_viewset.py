@@ -38,7 +38,7 @@ class CategoryViewSet(APITestCase):
         })
 
         response = self.client.post(
-            reverse('category-list', kwargs={'version': 'v1'}),
+            reverse('category-list'),
             data = data,
             content_type='application/json'
         )
