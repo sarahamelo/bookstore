@@ -40,6 +40,7 @@ RUN apt-get update \
     # deps for building python deps
     build-essential
 
+RUN pip install --upgrade pip setuptools wheel
 
 # install poetry - respects $POETRY_VERSION & $POETRY_HOME
 RUN curl -sSL https://install.python-poetry.org | python3
@@ -56,9 +57,6 @@ COPY poetry.lock pyproject.toml ./
 
 # install runtime deps - uses $POETRY_VIRTUALENVS_IN_PROJECT internally
 RUN poetry install --no-dev
-
-# quicker install as runtime deps are already installed
-RUN poetry install
 
 WORKDIR /app
 
