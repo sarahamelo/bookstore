@@ -8,7 +8,7 @@ from django.urls import reverse
 from product.factories import CategoryFactory, ProductFactory
 from product.models import Category
 
-class CategoryViewSet(APITestCase):
+class TestCategoryViewSet(APITestCase): 
     client = APIClient()
 
     def setUp(self):
@@ -20,30 +20,30 @@ class CategoryViewSet(APITestCase):
         )
 
     def test_get_all_category(self):
-        response = self.client.get(
-            reverse('category-list', kwargs={'version': 'v1'})
-        )
-
+        response = self.client.get(reverse('category-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
         category_data = json.loads(response.content)
+        
+        self.assertIn('results', category_data)
+        self.assertGreater(len(category_data['results']), 0)
 
-        self.assertEqual(category_data[0]['title'], self.category.title)
-    
+        self.assertEqual(category_data['results'][0]['title'], self.category.title)
+
+
     def test_create_category(self):
-        data = json.dumps({
+        data = {
             "title": "technology",
             "slug": "technology",
             "description": "A tech category",
             "active": True
-        })
+        }
 
         response = self.client.post(
             reverse('category-list'),
-            data = data,
+            data=json.dumps(data),
             content_type='application/json'
         )
-
-        import pdb; pdb.set_trace()
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
