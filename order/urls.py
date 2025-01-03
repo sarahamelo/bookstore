@@ -7,5 +7,5 @@ router = routers.SimpleRouter()
 router.register(r'order', viewsets.OrderViewSet, basename='order')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('<str:version>/', include(router.urls)),
 ]
