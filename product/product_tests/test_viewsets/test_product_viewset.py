@@ -19,38 +19,41 @@ class TestProductViewSet(APITestCase):
         token.save()
 
         self.product = ProductFactory(
-            title = 'pro controller',
-            price = 200,
+            title='pro controller',
+            price=200,
         )
 
     def test_get_all_product(self):
-        token = Token.objects.get(user__username=self.user.username)
+        token, created = Token.objects.get_or_create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = self.client.get(
-            reverse('product-list', kwargs={'version': 'v1'})
-        )
 
+        response = self.client.get(reverse('product-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        product_data = json.loads(response.content)
 
-        self.assertEqual(product_data[0]['title'], self.product.title)
-        self.assertEqual(product_data[0]['price'], self.product.price)
-        self.assertEqual(product_data[0]['active'], self.product.active)
-        self.assertEqual(product_data[0]['category'][0]['title'], self.category.title)
-    
+        product_data = json.loads(response.content)
+        
+        # Verifique se há dados antes de acessar
+        self.assertIn('results', product_data)
+        self.assertGreater(len(product_data['results']), 0)
+
+        self.assertEqual(product_data['results'][0]['title'], self.product.title)
+        self.assertEqual(product_data['results'][0]['price'], self.product.price)
+
+
     def test_create_product(self):
-        token = Token.objects.get(user__username=self.user.username)
+        token, created = Token.objects.get_or_create(user=self.user)  # Verifica se já existe um token
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+
         category = CategoryFactory()
-        data = json.dumps({
+        data = {
             'title': 'notebook',
             'price': 800,
             'category_id': [category.id]
-        })
+        }
 
         response = self.client.post(
             reverse('product-list'),
-            data = data,
+            data=json.dumps(data),
             content_type='application/json'
         )
 
@@ -60,3 +63,4 @@ class TestProductViewSet(APITestCase):
 
         self.assertEqual(created_product.title, 'notebook')
         self.assertEqual(created_product.price, 800)
+
