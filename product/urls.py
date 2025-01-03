@@ -1,5 +1,5 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter  # Corrigida a importação
+from rest_framework.routers import DefaultRouter 
 
 from product.viewsets import ProductViewSet, CategoryViewSet
 

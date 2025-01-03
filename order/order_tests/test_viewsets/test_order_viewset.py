@@ -18,12 +18,10 @@ class TestOrderViewSet(APITestCase):
         self.order = OrderFactory(product=[self.product])
 
     def test_order(self):
-        # Ajustando a chamada de reverse para não utilizar 'kwargs'
         response = self.client.get(reverse('order-list'))
         
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        # Verificando se há dados no retorno para evitar KeyError
         response_data = json.loads(response.content)
         self.assertIn('results', response_data)
         self.assertGreater(len(response_data['results']), 0)

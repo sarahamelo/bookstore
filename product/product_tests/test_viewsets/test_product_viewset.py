@@ -31,8 +31,6 @@ class TestProductViewSet(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         product_data = json.loads(response.content)
-        
-        # Verifique se há dados antes de acessar
         self.assertIn('results', product_data)
         self.assertGreater(len(product_data['results']), 0)
 
@@ -41,7 +39,7 @@ class TestProductViewSet(APITestCase):
 
 
     def test_create_product(self):
-        token, created = Token.objects.get_or_create(user=self.user)  # Verifica se já existe um token
+        token, created = Token.objects.get_or_create(user=self.user) 
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
         category = CategoryFactory()

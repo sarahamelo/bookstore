@@ -8,7 +8,7 @@ from django.urls import reverse
 from product.factories import CategoryFactory, ProductFactory
 from product.models import Category
 
-class TestCategoryViewSet(APITestCase):  # Certifique-se do nome correto da classe
+class TestCategoryViewSet(APITestCase): 
     client = APIClient()
 
     def setUp(self):
@@ -25,7 +25,6 @@ class TestCategoryViewSet(APITestCase):  # Certifique-se do nome correto da clas
         
         category_data = json.loads(response.content)
         
-        # Verifique se há dados antes de acessar
         self.assertIn('results', category_data)
         self.assertGreater(len(category_data['results']), 0)
 
