@@ -15,7 +15,8 @@ django-extensions = "^3.2.3"
 pytest-django = "^4.9.0"
 django-debug-toolbar = "^4.4.6"
 psycopg2-binary = "^2.9.10"
-
+gunicorn = "^23.0.0"
+waitress = "^3.0.2"
 
 [build-system]
 requires = ["poetry>=1.0"]
